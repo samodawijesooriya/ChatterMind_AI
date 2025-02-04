@@ -2,25 +2,149 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ChatBot Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fc;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #00796b;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        /* Navbar Styling */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #00796b;
+            padding: 15px 30px;
+            color: white;
+        }
+
+        .navbar .logo {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            background-color: #004d40;
+        }
+
+        h2 {
+            margin: 0;
+        }
+        .container {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        .left-column, .right-column {
+            width: 48%;
+        }
+        .section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .section h3 {
+            margin-top: 0;
+        }
+        .chatbot-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .chatbot-list li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .chatbot-list li:last-child {
+            border-bottom: none;
+        }
+        a {
+            text-decoration: none;
+            color: #00796b;
+        }
+        a:hover {
+            color: #388e3c;
+        }
+        .button {
+            background-color: #00796b;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
-    <h2>ChatBot Dashboard @Matheesha💩 (ලීග්)</h2>
-
-    {% if no_chatbots_message %}
-        <p>{{ no_chatbots_message }}</p>
-    {% else %}
-        <ul>
-            {% for chatbot in chatbots %}
-                <li>
-                    <a href="{% url 'view_chatbot' chatbot.id %}">{{ chatbot.name }}</a>
-                </li>
-            {% endfor %}
+    <div class="navbar">
+        <div class="logo">🤖 Chatterbot</div>
+        <ul class="nav-links">
+            <li><a href="new_chatbot">New Chatbot</a></li>
+            <li><a href="login">Logout</a></li>
         </ul>
-    {% endif %}
-    
-    <a href="{% url 'new_chatbot' %}">Create New ChatBot</a>
-    <br>
-    <a href="{% url 'chatbot_history' %}">ChatBot History</a>
+    </div>
+
+    <div class="container">
+        <!-- Left Column: List of ChatBots -->
+        <div class="left-column">
+            <div class="section">
+                <h3>ChatBots</h3>
+                <h4>Recent History</h4>
+                {% if no_chatbots_message %}
+                    <p>{{ no_chatbots_message }}</p>
+                {% else %}
+                    <ul class="chatbot-list">
+                        {% for chatbot in chatbots %}
+                            <li>
+                                <a href="{% url 'view_chatbot' chatbot.id %}">{{ chatbot.name }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Right Column: Create New ChatBot & ChatBot History -->
+        <div class="right-column">
+            <!-- Create New ChatBot Button -->
+            <div class="section">
+                <h3>Create New ChatBot</h3>
+                <a href="{% url 'new_chatbot' %}" class="button">Create ChatBot</a>
+                
+            </div>
+        </div>
+    </div>
 </body>
 </html>
