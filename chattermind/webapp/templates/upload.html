@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Document</title>
+    <style>
+        body {
+            background-color: #e0f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .upload-container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #00796b;
+        }
+
+        input[type="file"] {
+            width: 90%;
+            padding: 10px;
+            margin: 15px 0;
+            border: 1px solid #b2dfdb;
+            border-radius: 4px;
+        }
+
+        .upload-btn {
+            background: linear-gradient(135deg, #6a11cb, #2575fc); /* Gradient from purple to blue */
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px; /* Fully rounded corners */
+            cursor: pointer;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            width: 100%;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .upload-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="upload-container">
+        <h2>Upload Your Document</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="document" required>
+            <button type="submit" class="upload-btn">Upload</button>
+        </form>
+        <br>
+        <!-- Add a go back button -->
+        <a href="{% url 'home' %}" >Go Back</a>
+    </div>
+</body>
+</html>
+
+{% if alert_message %}
+    <script>
+        alert("{{ alert_message }}");
+    </script>
+{% endif %}

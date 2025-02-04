@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        body {
+            background-color: #e0f7fa;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #00796b;
+            padding: 15px 30px;
+            color: white;
+        }
+
+        .navbar .logo {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            background-color: #004d40;
+        }
+
+        /* Home Container */
+        .home-container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 350px;
+            margin: 50px auto;
+        }
+
+        h2 {
+            color: #00796b;
+        }
+
+        .upload-btn {
+            background-color: #00796b;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            margin-top: 20px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .upload-btn:hover {
+            background-color: #004d40;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">🤖 Chatterbot</div>
+        <ul class="nav-links">
+            <li><a href="dashboard">Dashboard</a></li>
+            <li><a href="new_chatbot">New Chatbot</a></li>
+            <li><a href="history">Chatbot History</a></li>
+            <li><a href="login">Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="home-container">
+        <h2>Welcome to the Chatterbot</h2>
+        <p>Upload and manage your documents securely.</p>
+        <a href="upload.html"><button class="upload-btn">Upload Document</button></a>
+        <a href="view-documents"><button class="upload-btn" style="margin-top: 10px;">View Uploaded Documents</button></a>
+    </div>
+</body>
+</html>

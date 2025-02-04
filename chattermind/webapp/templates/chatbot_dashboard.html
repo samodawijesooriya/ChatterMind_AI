@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ChatBot Dashboard</title>
+</head>
+<body>
+    <h2>ChatBot Dashboard @Matheesha💩 (ලීග්)</h2>
+
+    {% if no_chatbots_message %}
+        <p>{{ no_chatbots_message }}</p>
+    {% else %}
+        <ul>
+            {% for chatbot in chatbots %}
+                <li>
+                    <a href="{% url 'view_chatbot' chatbot.id %}">{{ chatbot.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    
+    <a href="{% url 'new_chatbot' %}">Create New ChatBot</a>
+    <br>
+    <a href="{% url 'chatbot_history' %}">ChatBot History</a>
+</body>
+</html>
