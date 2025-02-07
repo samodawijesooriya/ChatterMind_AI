@@ -4,19 +4,22 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, JsonResponse
 from django.conf import settings
 from pymongo import MongoClient
-from .models import Document
+from .models import Document, Chatbot
 from django.core.files.storage import FileSystemStorage
 import bcrypt
 from bson import ObjectId
-from .models import Chatbot
 import uuid
-
+import random
+import string
+import smtplib
+from email.mime.text import MIMEText
 
 client = MongoClient("mongodb+srv://798white:SgOe9IxCwPEZIx1L@chatterbot.zv9ev.mongodb.net/?retryWrites=true&w=majority&appName=chatterbot")
 db = client.get_database('chatterbot')
 users_collection = db.get_collection('users')
 chatbots_collection = db.get_collection('chatbots')
 documents_collection = db.get_collection('documents')
+
 def settings(request):
     if request.method == "POST":
         return update_profile(request)  # Handle profile update if form submitted
@@ -112,7 +115,6 @@ def create_chatbot(request):
         if not chatbot_name or not uploaded_file:
             return render(request, "chatbot_form.html", {"error": "All fields are required!"})
 
-
         chatbot_id = str(uuid.uuid4())
 
         # Define the chatbot directory inside media/uploads/{username}/{chatbot_name}/
@@ -137,7 +139,6 @@ def create_chatbot(request):
         return redirect("home")  # Replace with your success URL
 
     return render(request, "new_chatbot.html")
-
 
 def view_uploads(request, chatbot_name):
     user = request.session.get("username")
@@ -176,9 +177,7 @@ def delete_document(request, file_name):
 
     return redirect("view_uploads")
 
-
 def chatbot_dashboard(request):
-    
     # Render the template with the chatbots (empty or populated)
     return render(request, 'chatbot_dashboard.html')
 
@@ -195,3 +194,43 @@ def chatbot_detail(request, chatbot_name):
         return render(request, "chatbot_detail.html", {"error": "Chatbot not found!"})
 
     return render(request, "chatbot_detail.html", {"chatbot": chatbot})
+
+def send_verification_code(email, code):
+    msg = MIMEText(f"Your verification code is: {code}")
+    msg['Subject'] = 'Password Reset Verification Code'
+    msg['From'] = 'your_email@example.com'
+    msg['To'] = email
+
+    with smtplib.SMTP('smtp.example.com', 587) as server:
+        server.starttls()
+        server.login('your_email@example.com', 'your_email_password')
+        server.sendmail('your_email@example.com', email, msg.as_string())
+
+def generate_verification_code(length=6):
+    return ''.join(random.choice(string.digits) for i in range(length))
+
+def forgot_password(request):
+    if request.method == "POST":
+        username = request.POST.get('username')
+        user = users_collection.find_one({'username': username})
+        if user:
+            verification_code = generate_verification_code()
+            users_collection.update_one({'username': username}, {'$set': {'verification_code': verification_code}})
+            send_verification_code(user['email'], verification_code)
+            return render(request, 'reset_password.html')
+        else:
+            return HttpResponse("Username not found!")
+    return render(request, 'forgot_password.html')
+
+def reset_password(request):
+    if request.method == "POST":
+        username = request.POST.get('username')
+        verification_code = request.POST.get('verification_code')
+        new_password = request.POST.get('new_password')
+        user = users_collection.find_one({'username': username, 'verification_code': verification_code})
+        if user:
+            hashed_new_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
+            users_collection.update_one({'username': username}, {'$set': {'password': hashed_new_password, 'verification_code': None}})
+            return HttpResponse("Password has been reset successfully!")
+        else:
+            return HttpResponse("Invalid verification code or username!")

@@ -28,4 +28,12 @@ poetry.lock
 
 # OS-specific files
 .DS_Store
-Thumbs.db
+# Media files
+media/uploads/*
+!media/uploads/.gitkeep
+
+# SQLite database files
+*.sqlite3
+
+# Python compiled files
+*.pyc
