@@ -14,7 +14,11 @@ urlpatterns = [
     path("home/new_chatbot/new_chatbot.html", views.create_chatbot, name="upload"),
     path('view_uploads/', views.view_uploads, name='view_uploads'),
     path('home/view-documents/', views.view_uploads, name='view_doc'),
+    path('view_uploads/<str:chatbot_name>/', views.view_uploads, name='view_uploads'),
     path("delete/<str:file_name>/", delete_document, name="delete_document"),
     path('home/dashboard/login/', views.login, name='login'),
+    path('home/chatbot/<str:chatbot_name>/', views.chatbot_detail, name='chatbot_detail'),
 ]
+
+
 

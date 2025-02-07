@@ -44,22 +44,16 @@
         <ul class="document-list">
             {% for document in files %}
                 <li class="document-item">
-                    <a href="{{ document.file_url }}" target="_blank">{{ document.file_name }}</a>
+                    <a href="{{ document.file_path }}" target="_blank">
+                        {{ document }}
+                    </a>
                     <span>&nbsp;&nbsp;</span>
-                        <a href="{% url 'delete_document' document.file_name %}" class="btn delete">
-                            <i class="fas fa-trash"></i>
-                        </a>
-                        <!-- make some space between them -->
-                        <span>&nbsp;&nbsp;</span>
-                        <a href="{{ document.file_url }}" download="{{ document.file_name }}" class="btn download">
-                            <i class="fas fa-download"></i> 
-                        </a>
                 </li>
             {% empty %}
                 <p>No documents uploaded yet.</p>
             {% endfor %}
         </ul>
-            <a href="{% url 'home' %}" class="btn">Go Back</a>
+            <a href="{% url 'chatbot_detail' chatbot_name=chatbot_name %}" class="btn">Go Back</a>
     </div>
 </body>
 </html>

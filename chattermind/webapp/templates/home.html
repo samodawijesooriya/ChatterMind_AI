@@ -131,6 +131,16 @@
         .button:hover {
             background-color: #45a049;
         }
+        .chatbot-item {
+            margin: 10px 0;
+            background-color: #f1f1f1;
+            padding: 10px;
+            border-radius: 6px;
+        }
+        .chatbot-list{
+            list-style-type: none;
+            padding: 0;
+        }
     </style>
 </head>
 <body>
@@ -153,17 +163,15 @@
             <div class="section">
                 <h3>ChatBots</h3>
                 <h4>Recent History</h4>
-                {% if no_chatbots_message %}
-                    <p>{{ no_chatbots_message }}</p>
-                {% else %}
-                    <ul class="chatbot-list">
-                        {% for chatbot in chatbots %}
-                            <li>
-                                <a href="{% url 'view_chatbot' chatbot.id %}">{{ chatbot.name }}</a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
+                <ul class="chatbot-list">
+                    {% for chatbot in chatbots %}
+                        <li class="chatbot-item"><a href="{% url 'chatbot_detail' chatbot.chatbot_name %}">
+                            {{ chatbot.chatbot_name }}
+                        </a></li>
+                    {% empty %}
+                        <p>No chatbots created yet.</p>
+                    {% endfor %}
+                </ul>
             </div>
         </div>
 
@@ -173,7 +181,6 @@
             <div class="section">
                 <h3>Create New ChatBot</h3>
                 <a href="{% url 'new_chatbot' %}" class="button">Create ChatBot</a>
-                
             </div>
         </div>
     </div>

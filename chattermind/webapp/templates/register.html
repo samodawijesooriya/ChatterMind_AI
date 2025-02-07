@@ -46,6 +46,7 @@
         .register-container button:hover {
             background-color: #004d40;
         }
+<<<<<<< HEAD
         p {
         text-align: center;
         font-size: 12px;
@@ -56,6 +57,15 @@
             color: #4CAF50;
         }
         a:hover {
+=======
+        .register-container .login-link {
+            margin-top: 10px;
+            display: block;
+            color: #00796b;
+            text-decoration: none;
+        }
+        .register-container .login-link:hover {
+>>>>>>> 8c6697d4131aec289aa0bd94d92725dfde87c3b8
             text-decoration: underline;
         }
     </style>
@@ -65,12 +75,17 @@
         <h2>Register</h2>
         <form method="POST">
             <input type="text" name="username" placeholder="Username" required>
+            <input type="email" name="email" placeholder="Email" required>
             <input type="password" name="password" placeholder="Password" required>
             <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
             <button type="submit">Register</button>
         </form>
+<<<<<<< HEAD
 
         <p><a href="{% url 'login' %}">Back to Login </a></p>
+=======
+        <a href="/login" class="login-link">Already have an account? Login here</a>
+>>>>>>> 8c6697d4131aec289aa0bd94d92725dfde87c3b8
     </div>
 </body>
 </html>
