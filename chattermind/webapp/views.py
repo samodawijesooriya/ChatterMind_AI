@@ -154,7 +154,7 @@ def view_uploads(request, chatbot_name):
     # Get the chatbot's folder path
     chatbot_folder = os.path.join(settings.MEDIA_ROOT, "uploads", user, chatbot_name)
 
-    # List all files in the chatbot's folder
+    # List all files in the chatbot's folder 
     if os.path.exists(chatbot_folder):
         files = os.listdir(chatbot_folder)
     else:
