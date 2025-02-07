@@ -37,3 +37,4 @@ media/uploads/*
 
 # Python compiled files
 *.pyc
+.env
