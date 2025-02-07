@@ -18,7 +18,11 @@ urlpatterns = [
     path("delete/<str:file_name>/", delete_document, name="delete_document"),
     path('home/dashboard/login/', views.login, name='login'),
     path('home/chatbot/<str:chatbot_name>/', views.chatbot_detail, name='chatbot_detail'),
+    path('settings/', views.settings, name='settings'),  # New settings page
+    path('update-profile/', views.update_profile, name='update_profile'),  # For updating user info
+    path('toggle-theme/', views.toggle_theme, name='toggle_theme'),  # For toggling dark mode
+    path('settings/', views.settings, name='settings'),  # New settings page
+    path('update-profile/', views.update_profile, name='update_profile'),  # For updating user info
+    path('toggle-theme/', views.toggle_theme, name='toggle_theme'),  # For toggling dark mode
 ]
-
-
 

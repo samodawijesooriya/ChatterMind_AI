@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <style>
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+        .container {
+            background-color: var(--container-bg);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: var(--button-hover);
+        }
+        .toggle-theme {
+            margin-top: 10px;
+            background-color: var(--toggle-bg);
+            color: var(--toggle-text);
+        }
+    </style>
+    <script>
+        function toggleTheme() {
+            fetch("/toggle-theme/", { method: "POST", headers: {'X-CSRFToken': '{{ csrf_token }}'}})
+                .then(response => response.json())
+                .then(data => {
+                    if (data.dark_mode) {
+                        document.documentElement.style.setProperty('--bg-color', '#333');
+                        document.documentElement.style.setProperty('--text-color', '#fff');
+                        document.documentElement.style.setProperty('--container-bg', '#444');
+                        document.documentElement.style.setProperty('--border-color', '#666');
+                        document.documentElement.style.setProperty('--button-bg', '#007BFF');
+                        document.documentElement.style.setProperty('--button-text', '#fff');
+                        document.documentElement.style.setProperty('--button-hover', '#0056b3');
+                        document.documentElement.style.setProperty('--toggle-bg', '#f1c40f');
+                        document.documentElement.style.setProperty('--toggle-text', '#000');
+                    } else {
+                        document.documentElement.style.setProperty('--bg-color', '#f0f0f0');
+                        document.documentElement.style.setProperty('--text-color', '#000');
+                        document.documentElement.style.setProperty('--container-bg', '#fff');
+                        document.documentElement.style.setProperty('--border-color', '#ccc');
+                        document.documentElement.style.setProperty('--button-bg', '#007BFF');
+                        document.documentElement.style.setProperty('--button-text', '#fff');
+                        document.documentElement.style.setProperty('--button-hover', '#0056b3');
+                        document.documentElement.style.setProperty('--toggle-bg', '#007BFF');
+                        document.documentElement.style.setProperty('--toggle-text', '#fff');
+                    }
+                });
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>Settings</h2>
+        <form method="POST" action="/update-profile/">
+            <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+            <input type="text" name="username" value="{{ user.username }}" placeholder="Username" required>
+            <input type="email" name="email" value="{{ user.email }}" placeholder="Email" required>
+            <input type="password" name="password" placeholder="New Password (leave blank if unchanged)">
+            <button type="submit">Update Profile</button>
+        </form>
+        <button class="toggle-theme" onclick="toggleTheme()">Toggle Dark Mode</button>
+    </div>
+</body>
+</html>
