@@ -241,9 +241,12 @@ def reset_password(request):
             return HttpResponse("Invalid verification code or username!")
 
 
+
 def landingpage(request):
     # Render the template with the chatbots (empty or populated)
     return render(request, 'landingpage.html')
+
+
 
 def chatbot(request):
     return render(request, 'chatbot.html')
@@ -255,5 +258,9 @@ def get_response(request):
         response = chatbot.rag_chain.invoke(user_input)  # Get chatbot response
         response = response.split('Answer:')[-1].strip() 
         print(response)
+
+        return JsonResponse({'response':response})
+
+
         return JsonResponse({'response':response})
 
