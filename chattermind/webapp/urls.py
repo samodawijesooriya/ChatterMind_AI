@@ -6,6 +6,7 @@ from .views import delete_document
 
 
 urlpatterns = [
+    path('', views.landingpage, name='landingpage'),  # Landing page
     path('login/', views.login, name='login'),
     path('home/login/', views.login, name='login'),
     path('register/', views.register, name='register'),
@@ -24,5 +25,6 @@ urlpatterns = [
     path('settings/', views.settings, name='settings'),  # New settings page
     path('update-profile/', views.update_profile, name='update_profile'),  # For updating user info
     path('toggle-theme/', views.toggle_theme, name='toggle_theme'),  # For toggling dark mode
+    
 ]
 

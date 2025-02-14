@@ -234,3 +234,7 @@ def reset_password(request):
             return HttpResponse("Password has been reset successfully!")
         else:
             return HttpResponse("Invalid verification code or username!")
+
+def landingpage(request):
+    # Render the template with the chatbots (empty or populated)
+    return render(request, 'landingpage.html')
