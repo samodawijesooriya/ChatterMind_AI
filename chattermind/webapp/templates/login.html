@@ -19,6 +19,7 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             animation: fadeIn 1s ease-in-out;
+            position: relative;
         }
         .login-container h2 {
             margin-bottom: 20px;
@@ -58,6 +59,24 @@
         .login-container .links a:hover {
             text-decoration: underline;
         }
+        .back-button {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            padding: 8px 15px;
+            background-color: #00796b;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .back-button:hover {
+            background-color: #175d54;
+            text-decoration: none;
+            color: white;
+        }
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -69,9 +88,9 @@
             }
         }
         p {
-        text-align: center;
-        font-size: 12px;
-        margin-top: 10px;
+            text-align: center;
+            font-size: 12px;
+            margin-top: 10px;
         }
         a {
             text-decoration: none;
@@ -84,6 +103,7 @@
 </head>
 <body>
     <div class="login-container">
+        <a href="{% url 'landing' %}" class="back-button">← Back</a>
         <h2>🤖 Chatterbot Login</h2>
         <form action="/login/" method="POST">
             <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"><br>

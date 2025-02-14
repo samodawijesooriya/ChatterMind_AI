@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SmartTutors</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: #e0f2f1;
+        }
+        .main-container {
+            display: flex;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            gap: 2rem;
+        }
+        .chat-section {
+            flex: 2;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }
+        .files-section {
+            flex: 1;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            height: fit-content;
+        }
+        .header {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        #chatbox {
+            height: 400px;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+            padding: 1rem;
+        }
+        .input-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+        #textInput {
+            flex: 1;
+            padding: 0.75rem;
+            border: 2px solid #00796b;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+        .btn-primary {
+            background-color: #00796b;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+        }
+        .btn-primary:hover {
+            background-color: #055b51;
+        }
+        .userText {
+            text-align: right;
+            margin: 0.5rem 0;
+        }
+        .userText span {
+            background-color: #00796b;
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: 15px 15px 0 15px;
+            display: inline-block;
+            max-width: 80%;
+        }
+        .botText {
+            text-align: left;
+            margin: 0.5rem 0;
+        }
+        .botText span {
+            background-color: #b2dfdb;
+            color: #00796b;
+            padding: 0.75rem 1rem;
+            border-radius: 15px 15px 15px 0;
+            display: inline-block;
+            max-width: 80%;
+        }
+        .file-list {
+            list-style: none;
+            padding: 0;
+        }
+        .file-item {
+            padding: 0.75rem;
+            border: 1px solid #00796b;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .file-icon {
+            color: #00796b;
+            font-size: 1.25rem;
+        }
+        .file-name {
+            color: #00796b;
+            text-decoration: none;
+            flex: 1;
+        }
+        .file-name:hover {
+            color: #055b51;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><b>{{ chatbot.chatbot_name|default:"Chattermind AI" }}</b></h1>
+        <h4>Please start your personalized interaction with the chatbot</h4>
+    </div>
+    
+    <div class="main-container">
+        <div class="chat-section">
+            <div id="chatbox">
+                <p class="botText">
+                    <span>Hi! How can I help you 😊</span>
+                </p>
+            </div>
+            <div class="input-group">
+                <input id="textInput" type="text" name="msg" placeholder="Type your message here..." class="form-control">
+                <button class="btn btn-primary" type="button" onclick="getBotResponse()">Send</button>
+            </div>
+        </div>
+        
+        <div class="files-section">
+            <h5 class="mb-4">Available Documents</h5>
+            <ul class="file-list">
+
+                <li class="file-item">
+                    <span class="file-icon">📄</span>
+                    <p>{{ files.name }}</p>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function getBotResponse() {
+            var rawText = $("#textInput").val();
+            if (rawText.trim() === "") return;
+            
+            var userHtml = '<p class="userText"><span>' + rawText + "</span></p>";
+            $("#textInput").val("");
+            $("#chatbox").append(userHtml);
+            
+            document.getElementById("chatbox").scrollTop = document.getElementById("chatbox").scrollHeight;
+            
+            $.get("/get_response/", { 
+                msg: rawText, 
+                index_name: "{{ chatbot.chatbot_id }}", 
+                text_file_path: "{{ files.url }}"
+            }).done(function (data) {
+                var botResponse = data.response;
+                var botHtml = '<p class="botText"><span>' + botResponse + "</span></p>";
+                $("#chatbox").append(botHtml);
+                document.getElementById("chatbox").scrollTop = document.getElementById("chatbox").scrollHeight;
+            });
+        }
+
+        $("#textInput").keypress(function (e) {
+            if (e.which == 13) {
+                getBotResponse();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -194,7 +194,7 @@
                 <ul class="chatbot-list">
                     {% for chatbot in chatbots %}
                         <li class="chatbot-item">
-                            <a href="{% url 'chatbot_detail' chatbot.chatbot_name %}">
+                            <a href="{% url 'chatbot_detail' chatbot.chatbot_id %}">
                                 {{ chatbot.chatbot_name }}
                             </a>
                         </li>

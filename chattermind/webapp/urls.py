@@ -8,6 +8,7 @@ from .views import upload_document
 
 urlpatterns = [
     path('login/', views.login, name='login'),
+    path('', views.landingpage, name='landingpage'),
     path('home/login/', views.login, name='login'),
     path('register/', views.register, name='register'),
     path('home/', views.home, name='home'),
@@ -22,16 +23,19 @@ urlpatterns = [
     path('delete/<str:chatbot_name>/<path:file_name>/', delete_document, name='delete_document'), 
 
     path('upload/<str:chatbot_name>/', upload_document, name='upload_document'),
- 
+    path('', views.landingpage, name='landing'),
 
     path('home/dashboard/login/', views.login, name='login'),
-    path('home/chatbot/<str:chatbot_name>/', views.chatbot_detail, name='chatbot_detail'),
+    path('home/chatbot/<str:chatbot_id>/', views.chatbot_detail, name='chatbot_detail'),
     path('settings/', views.settings, name='settings'),  # New settings page
     path('update-profile/', views.update_profile, name='update_profile'),  # For updating user info
     path('toggle-theme/', views.toggle_theme, name='toggle_theme'),  # For toggling dark mode
     path('settings/', views.settings, name='settings'),  # New settings page
     path('update-profile/', views.update_profile, name='update_profile'),  # For updating user info
     path('toggle-theme/', views.toggle_theme, name='toggle_theme'),  # For toggling dark mode
-    
+
+    # chatbot URLS
+    path('chatbot/<str:chatbot_id>/', views.chatbotView, name='chatbotView'),
+    path('get_response/', views.get_response, name='get_response'),  # For handling AJAX
 ]
 

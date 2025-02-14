@@ -13,6 +13,7 @@ import random
 import string
 import smtplib
 from email.mime.text import MIMEText
+from .chatbot import ChatBot # Import your chatbot class
 
 client = MongoClient("mongodb+srv://798white:SgOe9IxCwPEZIx1L@chatterbot.zv9ev.mongodb.net/?retryWrites=true&w=majority&appName=chatterbot")
 db = client.get_database('chatterbot')
@@ -105,6 +106,19 @@ def home(request):
         "chatbots": chatbots,
     })
 
+def generate_unique_id():
+    # Generate a random string of 10 characters (simple letters and numbers)
+    while True:
+        # Create random string with lowercase letters and digits
+        chars = string.ascii_lowercase + string.digits
+        random_id = ''.join(random.choice(chars) for _ in range(10))
+        
+        # Check if this ID already exists in the database
+        if not chatbots_collection.find_one({"chatbot_id": random_id}):
+            return random_id
+        
+
+
 def create_chatbot(request):
     if request.method == "POST":
 
@@ -118,7 +132,7 @@ def create_chatbot(request):
         if not chatbot_name or not uploaded_file:
             return render(request, "chatbot_form.html", {"error": "All fields are required!"})
 
-        chatbot_id = str(uuid.uuid4())
+        chatbot_id = chatbot_id = generate_unique_id()
 
         # Define the chatbot directory inside media/uploads/{username}/{chatbot_name}/
         chatbot_folder = os.path.join(MEDIA_ROOT, "uploads", user, chatbot_name)
@@ -144,10 +158,7 @@ def create_chatbot(request):
     return render(request, "new_chatbot.html")
 
 def upload_document(request, chatbot_name):
-
-
     if request.method == 'POST':
-        
         if "username" not in request.session:
             return redirect("login")
         
@@ -185,7 +196,7 @@ def view_uploads(request, chatbot_name):
 
     # Fetch chatbot details from MongoDB
     chatbot_data = chatbots_collection.find_one({"username": user, "chatbot_name": chatbot_name})
-
+    print("Chatbot Data: ", chatbot_data["chatbot_id"])
     if not chatbot_data:
         return render(request, "error.html", {"message": "Chatbot not found!"})
 
@@ -205,33 +216,35 @@ def view_uploads(request, chatbot_name):
     else:
         files = []
 
-    return render(request, "view_uploads.html", {"chatbot_name": chatbot_name, "files": files, "user": user})
+    return render(request, "view_uploads.html", {"chatbot_name": chatbot_name, "files": files, "user": user, "chatbot_id": chatbot_data['chatbot_id']})
 
 def delete_document(request, chatbot_name, file_name):
-        user = request.session.get("username")
-        if not user:
-            return redirect("login")
+    user = request.session.get("username")
+    if not user:
+        return redirect("login")
 
-        # Fetch chatbot details from MongoDB
-        chatbot_data = chatbots_collection.find_one({"username": user, "chatbot_name": chatbot_name})
+    # Fetch chatbot details from MongoDB
+    chatbot_data = chatbots_collection.find_one({"username": user, "chatbot_name": chatbot_name})
 
-        if not chatbot_data:
-            return render(request, "error.html", {"message": "Chatbot not found!"})
+    if not chatbot_data:
+        return HttpResponse("Chatbot not found.", status=404)
 
-        # Get the document's file path
-        file_path = os.path.join(MEDIA_ROOT, "uploads", user, chatbot_name, file_name)
+    # Get the document's file path
+    file_path = os.path.join(MEDIA_ROOT, "uploads", user, chatbot_name, file_name)
 
-        # Delete the file from the file system
-        if os.path.exists(file_path):
-            os.remove(file_path)
-        else:
-            return render(request, "error.html", {"message": "File not found!"})
+    # Delete the file from the file system
+    if os.path.exists(file_path):
+        os.remove(file_path)
 
-        # Remove the file path from MongoDB
-        chatbots_collection.update_one(
-            {"username": user, "chatbot_name": chatbot_name},
-            {"$unset": {"file_path": ""}}
-        )
+    # Remove the file path from MongoDB
+    chatbots_collection.update_one(
+        {"username": user, "chatbot_name": chatbot_name},
+        {"$unset": {"file_path": ""}}
+    )
+
+    # Redirect to the view_uploads view
+    return redirect('view_uploads', chatbot_name=chatbot_name)
+
 
 def chatbot_dashboard(request):
     # Render the template with the chatbots (empty or populated)
@@ -243,8 +256,8 @@ def new_chatbot(request):
 
     return render(request, 'new_chatbot.html')
 
-def chatbot_detail(request, chatbot_name):
-    chatbot = chatbots_collection.find_one({"chatbot_name": chatbot_name})
+def chatbot_detail(request, chatbot_id):
+    chatbot = chatbots_collection.find_one({"chatbot_id": chatbot_id})
 
     if not chatbot:
         return render(request, "chatbot_detail.html", {"error": "Chatbot not found!"})
@@ -294,3 +307,43 @@ def reset_password(request):
 def landingpage(request):
     # Render the template with the chatbots (empty or populated)
     return render(request, 'landingpage.html')
+
+def chatbotView(request, chatbot_id):
+    user = request.session.get("username")
+    if not user:
+        return redirect("login")
+
+    chatbot = chatbots_collection.find_one({"chatbot_id": chatbot_id})
+
+    if not chatbot:
+        return render(request, "chatbot.html", {"error": "Chatbot not found!"})
+    
+    # Get the chatbot's folder path
+    chatbot_folder = os.path.join(MEDIA_ROOT, "uploads", user, chatbot['chatbot_name'])
+
+    # List all files in the chatbot's folder 
+    if os.path.exists(chatbot_folder):
+        files = os.listdir(chatbot_folder)
+        file_urls = []
+        for file in files:
+            file_urls.append({
+                "name": file,
+                "url": '/media/uploads/{}/{}/{}'.format(user, chatbot['chatbot_name'], file)
+            })
+        files = file_urls
+    else:
+        files = []
+
+    return render(request, "chatbot.html", {"chatbot": chatbot, "files": files[0]})
+
+def get_response(request):
+    if request.method == 'GET':
+        user_input = request.GET.get('msg')
+        text_file_path = os.path.join('C:/projects/ChatterMind_AI/chattermind'+ request.GET.get('text_file_path'))
+        print(text_file_path)
+        index_name = request.GET.get('index_name')
+        chatbot = ChatBot()
+        chatbot.setbot(text_file_path, index_name)  # Create an instance of your chatbot class
+        response = chatbot.ask_question(user_input)
+        print(response)
+    return JsonResponse({'response':response})
