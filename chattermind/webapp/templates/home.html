@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        :root {
+            --bg-color: #e0f7fa;
+            --text-color: #000;
+            --container-bg: #fff;
+            --border-color: #ccc;
+            --primary-color: #00796b;
+            --primary-dark: #004d40;
+            --secondary-bg: #f1f1f1;
+            --hover-color: #388e3c;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #333;
+            --text-color: #fff;
+            --container-bg: #444;
+            --border-color: #666;
+            --primary-color: #00897b;
+            --primary-dark: #00695c;
+            --secondary-bg: #555;
+            --hover-color: #4caf50;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: var(--text-color);
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--primary-color);
+            padding: 15px 30px;
+            color: white;
+        }
+
+        .navbar .logo {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* Home Container */
+        .home-container {
+            background-color: var(--container-bg);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 350px;
+            margin: 50px auto;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        h2, h3, h4 {
+            color: var(--primary-color);
+        }
+
+        .container {
+            padding: 20px;
+            display: flex;
+            justify-content: space-evenly;
+            flex-wrap: wrap;
+        }
+
+        .left-column, .right-column {
+            width: 48%;
+        }
+
+        .section {
+            background-color: var(--container-bg);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .chatbot-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .chatbot-list li {
+            padding: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .chatbot-list li:last-child {
+            border-bottom: none;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--primary-color);
+        }
+
+        a:hover {
+            color: var(--hover-color);
+        }
+
+        .button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+
+        .button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .chatbot-item {
+            margin: 10px 0;
+            background-color: var(--secondary-bg);
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        p {
+            color: var(--text-color);
+        }
+    </style>
+    <script>
+        // Function to check and set the theme when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if there's a theme preference in localStorage
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        });
+
+        // Function to handle theme changes from other pages
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'theme') {
+                document.documentElement.setAttribute('data-theme', e.newValue);
+            }
+        });
+    </script>
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">🤖 Chatterbot</div>
+        <ul class="nav-links">
+            <li><a href="new_chatbot">New Chatbot</a></li>
+            <li><a href="settings">Settings</a></li>
+            <li><a href="login">Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="home-container">
+        <h2>Welcome to the Chatterbot</h2>
+        <p>Upload and manage your documents securely.</p>
+    </div>
+    <div class="container">
+        <!-- Left Column: List of ChatBots -->
+        <div class="left-column">
+            <div class="section">
+                <h3>ChatBots</h3>
+                <h4>Recent History</h4>
+                <ul class="chatbot-list">
+                    {% for chatbot in chatbots %}
+                        <li class="chatbot-item">
+                            <a href="{% url 'chatbot_detail' chatbot.chatbot_name %}">
+                                {{ chatbot.chatbot_name }}
+                            </a>
+                        </li>
+                    {% empty %}
+                        <p>No chatbots created yet.</p>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Right Column: Create New ChatBot -->
+        <div class="right-column">
+            <div class="section">
+                <h3>Create New ChatBot</h3>
+                <a href="{% url 'new_chatbot' %}" class="button">Create ChatBot</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

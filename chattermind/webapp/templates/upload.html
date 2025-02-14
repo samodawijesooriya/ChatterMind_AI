@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Document</title>
+    <style>
+        body {
+            background-color: #e0f7fa;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .upload-container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 350px;
+            margin: 50px auto;
+        }
+
+        h1 {
+            color: #00796b;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-size: 16px;
+            color: #00796b;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        input[type="text"],
+        input[type="file"] {
+            width: 325px;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        .upload-btn {
+            background-color: #00796b;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        .upload-btn:hover {
+            background-color: #004d40;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 15px;
+            text-decoration: none;
+            color: #00796b;
+            font-size: 14px;
+        }
+
+        .back-link:hover {
+            color: #004d40;
+        }
+    </style>
+</head>
+<body>
+    <div class="upload-container">
+        <h1>Upload Document for {{ chatbot_name }}</h1>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div>
+                <label for="ChatBotname">ChatBot Name:</label>
+                <input type="text" id="ChatBotname" name="ChatBotname" value="{{ chatbot_name }}" readonly>
+            </div>
+            <div>
+                <label for="document">Choose Document:</label>
+                <input type="file" id="document" name="document" required>
+            </div>
+            <button type="submit" class="upload-btn">Upload</button>
+        </form>
+        <a href="{% url 'home' %}" class="back-link">Back to Home</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <style>
+        /* Previous styles remain the same */
+        :root {
+            --bg-color: #e0f7fa;
+            --text-color: #000;
+            --container-bg: #fff;
+            --border-color: #ccc;
+            --primary-color: #00796b;
+            --primary-dark: #004d40;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #333;
+            --text-color: #fff;
+            --container-bg: #444;
+            --border-color: #666;
+            --primary-color: #00897b;
+            --primary-dark: #00695c;
+        }
+
+        /* Rest of your previous CSS remains the same */
+        body {
+            background-color: var(--bg-color);
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: var(--text-color);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--primary-color);
+            padding: 15px 30px;
+            color: white;
+        }
+
+        .navbar .logo {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .settings-container {
+            background-color: var(--container-bg);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            margin: 50px auto;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 16px;
+            background-color: var(--container-bg);
+            color: var(--text-color);
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .toggle-theme {
+            background-color: var(--primary-dark);
+            margin-top: 10px;
+        }
+    </style>
+    <script>
+        // Function to update button text based on current theme
+        function updateButtonText() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const toggleButton = document.getElementById('themeToggle');
+            toggleButton.textContent = currentTheme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+        }
+
+        // Call this when the page loads to set initial button text
+        document.addEventListener('DOMContentLoaded', updateButtonText);
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            fetch("/toggle-theme/", { 
+                method: "POST", 
+                headers: {'X-CSRFToken': '{{ csrf_token }}'}
+            })
+            .then(response => response.json())
+            .then(data => {
+                html.setAttribute('data-theme', newTheme);
+                updateButtonText(); // Update button text after theme change
+            })
+            .catch(error => {
+                // If the server request fails, still toggle the theme locally
+                html.setAttribute('data-theme', newTheme);
+                updateButtonText(); // Update button text after theme change
+            });
+        }
+    </script>
+</head>
+<body>
+    
+
+    <div class="settings-container">
+        <h2>Settings</h2>
+        <form method="POST" action="/update-profile/">
+            <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+            <input type="text" name="username" value="{{ user.username }}" placeholder="Username" required>
+            <input type="email" name="email" value="{{ user.email }}" placeholder="Email" required>
+            <input type="password" name="password" placeholder="New Password (leave blank if unchanged)">
+            <button type="submit">Update Profile</button>
+        </form>
+        <button id="themeToggle" class="toggle-theme" onclick="toggleTheme()">Switch to Dark Mode</button>
+    </div>
+</body>
+</html>

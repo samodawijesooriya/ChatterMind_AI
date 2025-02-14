@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Chatbot Details - {{ chatbot.chatbot_name }}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            background-color: #f4f4f9;
+            font-family: 'Arial', sans-serif;
+        }
+        .chatbot-container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .chatbot-header {
+            text-align: center;
+            color: #00796b;
+            font-size: 26px;
+            font-weight: bold;
+        }
+        .chatbot-info {
+            padding: 10px 0;
+        }
+        .chatbot-info i {
+            margin-right: 8px;
+            color: #00796b;
+        }
+        .btn-back {
+            color: #00796b;
+            margin-top: 20px;
+            display: block;
+            text-align: center;
+        }
+        .btn-primary {
+        background-color: #00796b;
+        color: #fff;
+        hover: #004d40;
+    }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="chatbot-container">
+        {% if chatbot %}
+            <h2 class="chatbot-header"><i class="fas fa-robot"></i> {{ chatbot.chatbot_name }}</h2>
+
+            <div class="chatbot-info">
+                <p><i class="fas fa-user"></i> <strong>Created by:</strong> {{ chatbot.username }}</p>
+                <a href="{% url 'view_uploads' chatbot.chatbot_name %}" class="btn btn-primary"><i class="fas fa-file-upload"></i> View Uploaded Documents</a>
+                <a href="{% url 'upload_document' chatbot.chatbot_name %}" class="btn btn-primary">
+                    <i class="fas fa-file-upload"></i> Upload Doc
+                </a>
+            </div>
+                
+            <a href="{% url 'home' %}" class="btn btn-primary btn-back"><i class="button"></i > Back to Home</a>
+
+        {% else %}
+            <div class="alert alert-danger text-center">
+                <i class="fas fa-exclamation-triangle"></i> Chatbot not found!
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
