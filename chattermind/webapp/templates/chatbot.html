@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SmartTutors</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts - Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        /* Set height of body and the document to 100% */
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+        #chatbox {
+            margin-left: auto;
+            margin-right: auto;
+            width: 40%;
+            margin-top: 60px;
+        }
+        #userInput {
+            margin-left: auto;
+            margin-right: auto;
+            width: 40%;
+            margin-top: 60px;
+        }
+        #textInput {
+            width: 90%;
+            border: none;
+            border-bottom: 3px solid black;
+            font-family: 'Poppins', sans-serif;
+            font-size: 17px;
+            border: 2px solid #ced4da; /* Border for the input section */
+            border-radius: 10px; /* Rounded corners */
+            padding: 8px; /* Padding */
+        }
+        .userText {
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-size: 17px;
+            text-align: right;
+            line-height: 30px;
+        }
+        .userText span {
+            background-color: #808080;
+            padding: 10px;
+            border-radius: 10px;
+        }
+        .botText {
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-size: 17px;
+            text-align: left;
+            line-height: 30px;
+        }
+        .botText span {
+            background-color: #000000;
+            padding: 5px 20px 5px 20px;
+            border-radius: 10px;
+        }
+        .boxed {
+            margin-left: auto;
+            margin-right: auto;
+            width: 50%;
+            margin-top: 60px;
+            border: 1px solid green;
+        }
+        .center {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 200px;
+        }
+        footer {
+            background-color: #f8f9fa;
+            padding: 20px;
+            margin-top: 30px;
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            position: absolute; 
+            bottom: 0;
+        }
+
+    </style>
+</head>
+<body>
+<div>
+    <br><br><br><br><br><br><br><br><br>
+    <h1 align="center"><b>Chattermind AI</b></h1>
+    <h4 align="center" style="font-family: 'Poppins', sans-serif;"><b>Please start your personalized interaction with the chatbot</b></h4>
+    <!--<p align="center"><img src="static\\chatbot1.png" alt="Python-BOT" height="210" width="220"></p>-->
+    <div class="boxed">
+        <div>
+            <div id="chatbox">
+                <p class="botText">
+                    <span>Hi! I'm your AI-Generative Chatbot</span>
+                </p>
+            </div>
+            <div id="userInput">
+                <input id="textInput" type="text" name="msg" placeholder="Message" class="form-control border">
+                <div class="input-group-append">
+                  <button class="btn btn-primary" type="button" onclick="getBotResponse()">Submit</button>
+                </div>
+            </div>
+        </div>
+        
+        <script>
+            function getBotResponse() {
+                var rawText = $("#textInput").val();
+                var userHtml = '<p class="userText"><span>' + rawText + "</span></p>";
+                $("#textInput").val("");
+                $("#chatbox").append(userHtml);
+                document
+                    .getElementById("userInput")
+                    .scrollIntoView({ block: "start", behavior: "smooth" });
+                $.get("/get_response/", { msg: rawText }).done(function (data) {
+                    var botResponse = data.response;
+                    var botHtml = '<p class="botText"><span>' + botResponse+ "</span></p>";
+                    $("#chatbox").append(botHtml);
+                    document
+                        .getElementById("userInput")
+                        .scrollIntoView({ block: "start", behavior: "smooth" });
+                });
+            }
+            $("#textInput").keypress(function (e) {
+                if (e.which == 13) {
+                    getBotResponse();
+                }
+            });
+        </script>
+        
+        
+   
+    </div>

@@ -13,6 +13,7 @@ import random
 import string
 import smtplib
 from email.mime.text import MIMEText
+from .chatbot import ChatBot  # Import the chatbot logic
 
 client = MongoClient("mongodb+srv://798white:SgOe9IxCwPEZIx1L@chatterbot.zv9ev.mongodb.net/?retryWrites=true&w=majority&appName=chatterbot")
 db = client.get_database('chatterbot')
@@ -239,6 +240,20 @@ def reset_password(request):
         else:
             return HttpResponse("Invalid verification code or username!")
 
+
 def landingpage(request):
     # Render the template with the chatbots (empty or populated)
     return render(request, 'landingpage.html')
+
+def chatbot(request):
+    return render(request, 'chatbot.html')
+
+def get_response(request):
+    if request.method == 'GET':
+        user_input = request.GET.get('msg')
+        chatbot = ChatBot()  # Create an instance of your chatbot class
+        response = chatbot.rag_chain.invoke(user_input)  # Get chatbot response
+        response = response.split('Answer:')[-1].strip() 
+        print(response)
+        return JsonResponse({'response':response})
+
