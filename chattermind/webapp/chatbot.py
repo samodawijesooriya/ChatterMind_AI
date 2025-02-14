@@ -10,7 +10,7 @@ import os
 
 class ChatBot():
     load_dotenv()
-    loader = TextLoader('text.txt', encoding='utf-8')
+    loader = TextLoader('../text.txt', encoding='utf-8')
     documents = loader.load()
     text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=4)
     docs = text_splitter.split_documents(documents)
@@ -63,6 +63,6 @@ class ChatBot():
         | StrOutputParser() 
     )
 
-result = ChatBot.rag_chain.invoke(input("Enter the question: "))
+#result = ChatBot.rag_chain.invoke(input("Enter the question: "))
 
-print(result)
+#print(result)

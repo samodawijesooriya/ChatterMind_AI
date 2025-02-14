@@ -25,6 +25,14 @@ urlpatterns = [
     path('settings/', views.settings, name='settings'),  # New settings page
     path('update-profile/', views.update_profile, name='update_profile'),  # For updating user info
     path('toggle-theme/', views.toggle_theme, name='toggle_theme'),  # For toggling dark mode
-    
+
+
+    path('chatbot/', views.chatbot, name='chatbot'),
+    path('get_response/', views.get_response, name='get_response'),  # For handling AJAX
+
+
+    path('chatbot/', views.chatbot, name='chatbot'),
+    path('get_response/', views.get_response, name='get_response'),  # For handling AJAX
+
 ]
 
