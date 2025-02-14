@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        body {
+            background-color: #e0f7fa;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #00796b;
+            padding: 15px 30px;
+            color: white;
+        }
+
+        .navbar .logo {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            background-color: #004d40;
+        }
+
+        /* Home Container */
+        .home-container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 350px;
+            margin: 50px auto;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            color: #00796b;
+        }
+
+        .upload-btn {
+            background-color: #00796b;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            margin-top: 20px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .upload-btn:hover {
+            background-color: #004d40;
+        }
+
+        .container {
+            padding: 20px;
+            display: flex;
+            justify-content: space-evenly;
+            flex-wrap: wrap;
+        }
+        .left-column, .right-column {
+            width: 48%;
+        }
+        .section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .section h3 {
+            margin-top: 0;
+        }
+        .chatbot-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .chatbot-list li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .chatbot-list li:last-child {
+            border-bottom: none;
+        }
+        a {
+            text-decoration: none;
+            color: #00796b;
+        }
+        a:hover {
+            color: #388e3c;
+        }
+        .button {
+            background-color: #00796b;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+        .chatbot-item {
+            margin: 10px 0;
+            background-color: #f1f1f1;
+            padding: 10px;
+            border-radius: 6px;
+        }
+        .chatbot-list{
+            list-style-type: none;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">🤖 Chatterbot</div>
+        <ul class="nav-links">
+            <li><a href="new_chatbot">New Chatbot</a></li>
+            <li><a href="history">Chatbot History</a></li>
+            <li><a href="login">Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="home-container">
+        <h2>Welcome to the Chatterbot</h2>
+        <p>Upload and manage your documents securely.</p>
+    </div>
+    <div class="container">
+        <!-- Left Column: List of ChatBots -->
+        <div class="left-column">
+            <div class="section">
+                <h3>ChatBots</h3>
+                <h4>Recent History</h4>
+                <ul class="chatbot-list">
+                    {% for chatbot in chatbots %}
+                        <li class="chatbot-item"><a href="{% url 'chatbot_detail' chatbot.chatbot_name %}">
+                            {{ chatbot.chatbot_name }}
+                        </a></li>
+                    {% empty %}
+                        <p>No chatbots created yet.</p>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Right Column: Create New ChatBot & ChatBot History -->
+        <div class="right-column">
+            <!-- Create New ChatBot Button -->
+            <div class="section">
+                <h3>Create New ChatBot</h3>
+                <a href="{% url 'new_chatbot' %}" class="button">Create ChatBot</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
