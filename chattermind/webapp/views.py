@@ -20,6 +20,9 @@ users_collection = db.get_collection('users')
 chatbots_collection = db.get_collection('chatbots')
 documents_collection = db.get_collection('documents')
 
+MEDIA_ROOT = 'media'
+
+
 def settings(request):
     if request.method == "POST":
         return update_profile(request)  # Handle profile update if form submitted
@@ -61,6 +64,7 @@ def toggle_theme(request):
         return JsonResponse({'dark_mode': request.session['dark_mode']})
 
     return redirect('settings')
+
 
 def register(request):
     if request.method == "POST":
